@@ -1,4 +1,10 @@
-resource "digitalocean_droplet" "web" {
+# Tag
+resource "digitalocean_tag" "demo" {
+  name = "DesdeTerraform"
+}
+
+# Droplet
+resource "digitalocean_droplet" "demo" {
   # esto es para la cantidad de maquinas
   count = 3
 
@@ -16,6 +22,9 @@ resource "digitalocean_droplet" "web" {
 
   # el id del ssh a usar
   ssh_keys = [19491775]
+
+  # asigando el tag al droplet
+  tags = ["${digitalocean_tag.demo.id}"]
 
   # el codigo que ejecuta systemd para saber que esta docker corriendo y levantar el contenedor
   user_data = <<EOF
