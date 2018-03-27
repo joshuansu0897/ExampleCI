@@ -1,0 +1,23 @@
+{
+    "builders": [
+        {
+            "type": "digitalocean",
+            "image": "coreos-stable",
+            "region": "sfo2",
+            "size": "512mb",
+            "snapshot_name": "snapshot-devops-template",
+            "ssh_username": "core"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "git clone https://github.com/joshuansu0897/ExampleCI.git",
+                "cd ExampleCI",
+                "docker build -t devops-demo .",
+                "docker run -d -p 3000:3000 devops-demo"
+            ]
+        }
+    ]
+}
