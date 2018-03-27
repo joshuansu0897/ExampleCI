@@ -46,7 +46,7 @@ EOF
 # LoadBalancer
 resource "digitalocean_loadbalancer" "demo" {
   name   = "lb-DesdeTerraform"
-  region = "sfo3"
+  region = "sfo2"
 
   forwarding_rule {
     entry_port     = 80
