@@ -1,10 +1,23 @@
 resource "digitalocean_droplet" "web" {
-  image    = "32928393"
-  name     = "tf-demo-devops"
-  region   = "sfo2"
-  size     = "512mb"
+  # esto es para la cantidad de maquinas
+  count = 3
+
+  # el id de la imagen o snapshot
+  image = "32928393"
+
+  # nombre del droplet
+  name = "tf-demo-devops"
+
+  # region donde sera ejecutado sanfrancisco 2
+  region = "sfo2"
+
+  # tama;o que tendra el droplet
+  size = "512mb"
+
+  # el id del ssh a usar
   ssh_keys = [19491775]
 
+  # el codigo que ejecuta systemd para saber que esta docker corriendo y levantar el contenedor
   user_data = <<EOF
 #cloud-config
 coreos:
