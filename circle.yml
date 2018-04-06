@@ -17,3 +17,8 @@ deployment:
     branch: /feature_.*/
     commands:
       - sh deployment/one.sh
+  prod:
+    branch: master
+    owner: joshuansu0897
+    commands:
+      - sh deployment/prod.sh
