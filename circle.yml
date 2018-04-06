@@ -1,24 +1,56 @@
-machine:
-  node:
-    version: 8.9.4
-  services:
-    - docker
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: docker build -t devops .
+      # run tests!
+      - run: docker run devops npm test
 
-dependencies:
-  override:
-    - docker build -t devops .
+  deploy-qa:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to NOW
+          command:  sh deployment/one.sh
 
-test:
-  override:
-    - docker run devops npm test
+  deploy-prod:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to production
+          command: sh deployments/prod.sh
 
-deployment:
-  one:
-    branch: /feature_.*/
-    commands:
-      - sh deployment/one.sh
-  prod:
-    branch: master
-    owner: joshuansu0897
-    commands:
-      - sh deployment/prod.sh
+workflows:
+  version: 2
+  central_flow:
+      jobs:
+        - build
+        - deploy-qa:
+            requires:
+              - build
+            filters:
+              branches:
+                only: /feature_.*/
+        - deploy-prod:
+            requires:
+              - build
+            filters:
+              branches:
+                only: master
