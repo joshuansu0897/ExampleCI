@@ -24,7 +24,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      - run: docker run devops npm test
   deploy-qa:
     docker:
       # specify the version you desire here
