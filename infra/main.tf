@@ -6,7 +6,7 @@ resource "digitalocean_tag" "demo" {
 # Droplet
 resource "digitalocean_droplet" "demo" {
   # esto es para la cantidad de maquinas
-  count = 3
+  count = 2
 
   # el id de la imagen o snapshot
   image = "32928393"
@@ -59,6 +59,7 @@ resource "digitalocean_loadbalancer" "demo" {
   healthcheck {
     port     = 3000
     protocol = "http"
+    path     = "/"
   }
 
   # esto es para agregar por el id del droplet
