@@ -4,16 +4,15 @@
 #
 jobs:
   build:
-    working_directory: ~/ExampleCI
     docker:
       - image: circleci/node:8.1.0
+    working_directory: ~/ExampleCI
     steps:
       - run:
           name: create container devops
           command: docker build -t devops .
 
   test:
-    working_directory: ~/ExampleCI
     docker:
       - image: circleci/node:8.1.0
     steps:
@@ -22,7 +21,6 @@ jobs:
           command: docker run devops npm test
 
   deploy-qa:
-    working_directory: ~/ExampleCI
     docker:
       - image: circleci/node:8.1.0
     steps:
@@ -31,7 +29,6 @@ jobs:
           command:  sh deployment/one.sh
 
   deploy-prod:
-    working_directory: ~/ExampleCI
     docker:
       - image: circleci/node:8.1.0
     steps:
@@ -44,6 +41,9 @@ workflows:
   central_flow:
       jobs:
         - build
+        - test:
+            requires:
+              - build
         - deploy-qa:
             requires:
               - build
