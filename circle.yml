@@ -4,31 +4,36 @@
 #
 jobs:
   build:
+    working_directory: ~/ExampleCI
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.1.0
     steps:
       - run:
           name: create container devops
           command: docker build -t devops .
+
   test:
+    working_directory: ~/ExampleCI
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.1.0
     steps:
       - run:
           name: test containers
           command: docker run devops npm test
 
   deploy-qa:
+    working_directory: ~/ExampleCI
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.1.0
     steps:
       - run:
           name: deploy to NOW
           command:  sh deployment/one.sh
 
   deploy-prod:
+    working_directory: ~/ExampleCI
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:8.1.0
     steps:
       - run:
           name: deploy to prod
