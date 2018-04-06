@@ -1,0 +1,83 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.1.0
+    working_directory: ~/repo
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run: docker build -t devops .
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      # run tests!
+      - run: yarn test
+
+  deploy-qa:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to NOW
+          command:  sh deployment/one.sh
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+  deploy-prod:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8.9.4
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to production
+          command: sh deployments/prod.sh
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+workflows:
+  version: 2
+  central_flow:
+      jobs:
+        - build
+        - deploy-qa:
+            requires:
+              - build
+            filters:
+              branches:
+                only: /feature_.*/
+        - deploy-prod:
+            requires:
+              - build
+            filters:
+              branches:
+                only: master
