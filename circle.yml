@@ -8,42 +8,65 @@ jobs:
       - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
-      - run:
-          name: create container devops
-          command: docker build -t devops .
+      - setup_remote_docker
+      - checkout
+      - run: docker build -t devops .
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
 
-  test:
-    docker:
-      - image: circleci/node:8.1.0
-    steps:
-      - run:
-          name: test containers
-          command: docker run devops npm test
+      # run "tests"
+      - run: docker run devops npm test
 
   deploy-qa:
     docker:
-      - image: circleci/node:8.1.0
+      - image: circleci/node:7.10
+    working_directory: ~/ExampleCI
     steps:
+      - checkout
       - run:
           name: deploy to NOW
           command:  sh deployment/one.sh
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
 
   deploy-prod:
     docker:
-      - image: circleci/node:8.1.0
+      - image: circleci/node:7.10
+    working_directory: ~/ExampleCI
     steps:
+      - checkout
       - run:
           name: deploy to prod
           command: sh deployment/prod.sh
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+
 
 workflows:
   version: 2
   central_flow:
       jobs:
         - build
-        - test:
-            requires:
-              - build
         - deploy-qa:
             requires:
               - build
