@@ -21,6 +21,13 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+  test:
+    docker:
+      - image: circleci/node:8.1.0
+    working_directory: ~/ExampleCI
+    steps:
+      - setup_remote_docker
+      - checkout
       # run "tests"
       - run: docker run devops npm test
 
@@ -67,15 +74,20 @@ workflows:
   central_flow:
       jobs:
         - build
+        - test:
+            requires:
+              - build
         - deploy-qa:
             requires:
               - build
+              - test
             filters:
               branches:
                 only: /feature_.*/
         - deploy-prod:
             requires:
               - build
+              - test
             filters:
               branches:
                 only: master
