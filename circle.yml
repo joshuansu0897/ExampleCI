@@ -4,40 +4,19 @@
 #
 jobs:
   build:
-    docker:
-      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
       - setup_remote_docker
       - checkout
       - run: docker build -t devops .
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
 
   test:
-    docker:
-      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
+      - setup_remote_docker
       - checkout
-      - run: npm install
-      - run: mkdir ~/junit
-      - run:
-          command: mocha test --reporter mocha-junit-reporter
-          environment:
-            MOCHA_FILE: junit/test-results.xml
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit    
+      - run: docker build -t devops .
+      - run: docker run devops npm test
 
   deploy-qa:
     docker:
