@@ -4,6 +4,8 @@
 #
 jobs:
   build:
+    docker:
+      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
       - setup_remote_docker
@@ -11,9 +13,10 @@ jobs:
       - run: docker build -t devops .
 
   test:
+    docker:
+      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
-      - setup_remote_docker
       - checkout
       - run: docker build -t devops .
       - run: docker run devops npm test
