@@ -5,7 +5,7 @@
 jobs:
   build:
     docker:
-      - image: circleci/node:8.1.0
+      - image: scratch
     working_directory: ~/ExampleCI
     steps:
       - setup_remote_docker
@@ -14,16 +14,17 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:8.1.0
+      - image: scratch
     working_directory: ~/ExampleCI
     steps:
+      - setup_remote_docker
       - checkout
       - run: docker build -t devops .
       - run: docker run devops npm test
 
   deploy-qa:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
       - checkout
@@ -41,7 +42,7 @@ jobs:
 
   deploy-prod:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:8.1.0
     working_directory: ~/ExampleCI
     steps:
       - checkout
