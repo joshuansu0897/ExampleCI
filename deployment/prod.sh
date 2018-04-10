@@ -56,7 +56,7 @@ cd ..
 mensaje "Commit de los cambios"
 
 echo "Deploy: 
-        Date:$(date '+%r %d-%m-%Y')
+        Date:$(date)
         CircleBuildNum:$CIRCLE_BUILD_NUM
         idShapshot:$TF_VAR_image_id" >> deployment/DeploymentTimes.txt
         
