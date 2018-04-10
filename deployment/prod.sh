@@ -2,6 +2,7 @@
 echo "**********************************"
 echo "* Descargamos Packer Y Terraform *"
 echo "**********************************"
+echo ""
 
 # descargamos packer en /tmp/packer.zip
 wget -O /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.2/packer_1.2.2_linux_amd64.zip
@@ -12,16 +13,18 @@ wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.11.6/terra
 echo "***************************************"
 echo "* Descomprecion de Packer Y Terraform *"
 echo "***************************************"
+echo ""
 
 # descomprimimos el /tmp/packer.zip en /bin
-unzip /tmp/packer.zip -d ~/bin
+sudo unzip /tmp/packer.zip -d /bin
 # descomprimimos el /tmp/terraform.zip en /bin
-unzip /tmp/terraform.zip -d ~/bin
+sudo unzip /tmp/terraform.zip -d /bin
 
 # nada mas para que se vea mejor y para saber que esta pasando
 echo "*****************************************"
 echo "* Validamos y Buldeamos template packer *"
 echo "*****************************************"
+echo ""
 
 # validamos el template para apcker
 packer validate deployment/template.json &&
@@ -40,6 +43,7 @@ echo ""
 echo "**************************************************"
 echo "* Validamos y Aplicamos Infrastructura Terraform *"
 echo "**************************************************"
+echo ""
 
 # entramos a la carpeta
 cd infra && 
@@ -52,7 +56,14 @@ cd ..
 echo "*************************"
 echo "* Commit de los cambios *"
 echo "*************************"
+echo ""
 
+git config --global user.email "circle-ci@cricle-deploy.com" &&
+git config --global user.name "Circle CI Script" &&
 git add infra && 
 git commit -m "Deployed snapshot-devops-template-$CIRCLE_BUILD_NUM [skip ci]" &&
 git push origin master
+
+echo "**********************"
+echo "* Deployed and saved *"
+echo "**********************"
