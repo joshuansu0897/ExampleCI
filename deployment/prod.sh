@@ -1,3 +1,13 @@
+# la funcion que muestra el mensaje de areas
+# se necesita declarar primero sino, marcara errores en su invocacion
+function mensaje {
+    echo ""
+    echo "************************************************************"
+    echo "\t $1"
+    echo "************************************************************"
+    echo ""
+}
+# COMIENZA EL PEDO
 # nada mas para que se vea mejor y para saber que esta pasando
 mensaje "Descargamos Packer Y Terraform"
 
@@ -52,12 +62,3 @@ git commit -m "Deployed snapshot-devops-template-$CIRCLE_BUILD_NUM [skip ci]" &&
 git push origin master
 
 mensaje "Deployed and saved"
-
-# la funcion que muestra el mensaje de areas
-function mensaje {
-    echo ""
-    echo "************************************************************"
-    echo "\t $1"
-    echo "************************************************************"
-    echo ""
-}
