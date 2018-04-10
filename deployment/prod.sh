@@ -1,8 +1,5 @@
 # nada mas para que se vea mejor y para saber que esta pasando
-echo "**********************************"
-echo "* Descargamos Packer Y Terraform *"
-echo "**********************************"
-echo ""
+mensaje "Descargamos Packer Y Terraform"
 
 # descargamos packer en /tmp/packer.zip
 wget -O /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.2/packer_1.2.2_linux_amd64.zip
@@ -10,10 +7,7 @@ wget -O /tmp/packer.zip https://releases.hashicorp.com/packer/1.2.2/packer_1.2.2
 wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.11.6/terraform_0.11.6_linux_amd64.zip
 
 # nada mas para que se vea mejor y para saber que esta pasando
-echo "***************************************"
-echo "* Descomprecion de Packer Y Terraform *"
-echo "***************************************"
-echo ""
+mensaje "Descomprecion de Packer Y Terraform"
 
 # descomprimimos el /tmp/packer.zip en /bin
 sudo unzip /tmp/packer.zip -d /bin
@@ -21,10 +15,7 @@ sudo unzip /tmp/packer.zip -d /bin
 sudo unzip /tmp/terraform.zip -d /bin
 
 # nada mas para que se vea mejor y para saber que esta pasando
-echo "*****************************************"
-echo "* Validamos y Buldeamos template packer *"
-echo "*****************************************"
-echo ""
+mensaje "Validamos y Buldeamos template packer"
 
 # validamos el template para apcker
 packer validate deployment/template.json &&
@@ -40,30 +31,33 @@ echo "el ID de snapshot-devops-template-$CIRCLE_BUILD_NUM es: $TF_VAR_image_id"
 echo ""
 
 # nada mas para que se vea mejor y para saber que esta pasando
-echo "**************************************************"
-echo "* Validamos y Aplicamos Infrastructura Terraform *"
-echo "**************************************************"
-echo ""
+mensaje "Validamos y Aplicamos Infrastructura Terraform"
 
 # entramos a la carpeta
 cd infra && 
+# esto inicializa un terraform (como lo meti en gitignore es necesario hacer eso)
+terraform init -input=false && 
 # aplicamos el "-input=false" para, literal hace lo que dice... y el "-auto-approve" es para que no pida confirmacion
 terraform apply -input=false -auto-approve &&
 # regresamos a la raiz
 cd ..
 
 # nada mas para que se vea mejor y para saber que esta pasando
-echo "*************************"
-echo "* Commit de los cambios *"
-echo "*************************"
-echo ""
+mensaje "Commit de los cambios"
 
 git config --global user.email "circle-ci@cricle-deploy.com" &&
 git config --global user.name "Circle CI Script" &&
-git add infra && 
+git add * && 
 git commit -m "Deployed snapshot-devops-template-$CIRCLE_BUILD_NUM [skip ci]" &&
 git push origin master
 
-echo "**********************"
-echo "* Deployed and saved *"
-echo "**********************"
+mensaje "Deployed and saved"
+
+# la funcion que muestra el mensaje de areas
+function mensaje {
+    echo ""
+    echo "************************************************************"
+    echo "\t $1"
+    echo "************************************************************"
+    echo ""
+}
