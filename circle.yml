@@ -48,7 +48,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: 
-            -"3a:35:e2:5d:a2:91:71:9a:92:4b:85:08:9d:4f:02:b7"      
+            -"8a:f4:34:bd:59:2e:59:0c:47:60:9a:1b:7a:fc:e4:c5"      
       - run:
           name: deploy to prod
           command: sh deployment/prod.sh

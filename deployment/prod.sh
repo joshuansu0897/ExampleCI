@@ -58,7 +58,7 @@ mensaje "Commit de los cambios"
 echo "Deploy: 
         Date:$(date '+%r %d-%m-%Y')
         CircleBuildNum:$CIRCLE_BUILD_NUM
-        idShapshot:$TF_VAR_image_id" >> deployment/DepoyedTimes.txt
+        idShapshot:$TF_VAR_image_id" >> deployment/DeploymentTimes.txt
         
 git config --global user.email "circle-ci@cricle-deploy.com" &&
 git config --global user.name "Circle CI Script" &&
