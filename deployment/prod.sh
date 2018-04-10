@@ -55,6 +55,11 @@ cd ..
 # nada mas para que se vea mejor y para saber que esta pasando
 mensaje "Commit de los cambios"
 
+echo "Deploy: 
+        Date:$(date '+%r %d-%m-%Y')
+        CircleBuildNum:$CIRCLE_BUILD_NUM
+        idShapshot:$TF_VAR_image_id" >> deployment/DepoyedTimes.txt
+        
 git config --global user.email "circle-ci@cricle-deploy.com" &&
 git config --global user.name "Circle CI Script" &&
 git add * && 
