@@ -46,6 +46,9 @@ jobs:
     working_directory: ~/ExampleCI
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints: 
+            -"3a:35:e2:5d:a2:91:71:9a:92:4b:85:08:9d:4f:02:b7"      
       - run:
           name: deploy to prod
           command: sh deployment/prod.sh
