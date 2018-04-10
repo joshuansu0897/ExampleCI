@@ -9,7 +9,7 @@ resource "digitalocean_droplet" "demo" {
   count = 2
 
   # el id de la imagen o snapshot
-  image = "32928393"
+  image = "${var.image_id}"
 
   # nombre del droplet
   name = "tf-demo-devops"
@@ -25,6 +25,17 @@ resource "digitalocean_droplet" "demo" {
 
   # asigando el tag al droplet
   tags = ["${digitalocean_tag.demo.id}"]
+
+  # esto hace que cree primero los droplets y luego destruya lo que ya tiene (sin esto es al reves)
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  # esto es un comando que ejecuta terraform, en este comando verificamos que los droplets respondan
+  # en 160 segundos (no es la mejor formar digitalocean aun no lo integr)
+  provisioner "local-exec" {
+    command = "sleep 160 && curl ${self.ipv4_address}:3000"
+  }
 
   # el codigo que ejecuta systemd para saber que esta docker corriendo y levantar el contenedor
   user_data = <<EOF
