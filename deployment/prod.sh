@@ -1,6 +1,6 @@
 # la funcion que muestra el mensaje de areas
 # se necesita declarar primero sino, marcara errores en su invocacion
-function mensaje {
+mensaje () {
     echo ""
     echo "************************************************************"
     echo "\t $1"
