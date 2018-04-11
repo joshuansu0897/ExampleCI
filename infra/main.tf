@@ -33,9 +33,10 @@ resource "digitalocean_droplet" "demo" {
 
   # esto es un comando que ejecuta terraform, en este comando verificamos que los droplets respondan
   # en 160 segundos (no es la mejor formar digitalocean aun no lo integr)
-  provisioner "local-exec" {
-    command = "sleep 160 && curl ${self.ipv4_address}:3000"
-  }
+  # agregar un ping
+  #provisioner "local-exec" {
+  #command = "sleep 160 && curl ${self.ipv4_address}:3000"
+  #}
 
   # el codigo que ejecuta systemd para saber que esta docker corriendo y levantar el contenedor
   user_data = <<EOF
