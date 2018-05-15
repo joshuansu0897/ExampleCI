@@ -46,7 +46,7 @@ mensaje "Validamos y Aplicamos Infrastructura Terraform"
 # entramos a la carpeta
 cd infra && 
 # esto inicializa un terraform (como lo meti en gitignore es necesario hacer eso)
-terraform init -input=false -backend-config "access_key=$TF_VAR_access_key" -backend-config "secret_key=$TF_VAR_secret_key" && 
+terraform init -backend-config "access_key=$TF_VAR_access_key" -backend-config "secret_key=$TF_VAR_secret_key" && 
 # aplicamos el "-input=false" para, literal hace lo que dice... y el "-auto-approve" es para que no pida confirmacion
 terraform apply -input=false -auto-approve &&
 # regresamos a la raiz
