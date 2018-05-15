@@ -1,4 +1,11 @@
 variable "image_id" {
   type    = "string"
-  default = "33350415"
+}
+
+variable "access_key" {
+  type    = "string"
+}
+
+variable "secret_key" {
+  type    = "string"
 }
