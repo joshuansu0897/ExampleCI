@@ -1,4 +1,4 @@
 variable "image_id" {
   type    = "string"
-  default = "34377098"
+  default = "34376881"
 }
